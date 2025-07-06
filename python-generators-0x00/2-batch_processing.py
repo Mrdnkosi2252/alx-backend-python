@@ -8,11 +8,11 @@ def stream_users_in_batches(batch_size):
     try:
         connection = mysql.connector.connect(
             host="localhost",
-            user="alx_user",  # Replace with your MySQL username
-            password="Davidnkosi12301*",  # Replace with your MySQL password
+            user="alx_user",  
+            password="Davidnkosi12301*",  
             database="ALX_prodev"
         )
-        cursor = connection.cursor(dictionary=True)  # Use dictionary cursor for key-value pairs
+        cursor = connection.cursor(dictionary=True)  #
         cursor.execute("SELECT * FROM user_data")
         while True:
             rows = cursor.fetchmany(batch_size)
