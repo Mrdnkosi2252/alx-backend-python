@@ -8,8 +8,8 @@ def paginate_users(page_size, offset):
     try:
         connection = mysql.connector.connect(
             host="localhost",
-            user="alx_user",  # Replace with your MySQL username
-            password="Davidnkosi12301*",  # Replace with your MySQL password
+            user="alx_user",  
+            password="Davidnkosi12301*",
             database="ALX_prodev"
         )
         cursor = connection.cursor(dictionary=True)
