@@ -1,5 +1,6 @@
 from django.urls import path
+from .views import ConversationListCreate
 
 urlpatterns = [
-    #  i will Add  my API endpoints here
+    path('conversations/', ConversationListCreate.as_view(), name='conversation-list'),
 ]
