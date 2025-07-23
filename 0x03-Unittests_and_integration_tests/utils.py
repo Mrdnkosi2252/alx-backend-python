@@ -1,17 +1,19 @@
-
 import requests
-
-def get_json(url):
-    """Fetch JSON data from a URL."""
-    response = requests.get(url)
-    return response.json()
 
 def access_nested_map(nested_map, path):
     """Access a nested value in a dictionary using a tuple of keys."""
     value = nested_map
     for key in path:
-        value = value[key]
+        if isinstance(value, dict):
+            value = value[key]
+        else:
+            raise KeyError(key)
     return value
+
+def get_json(url):
+    """Fetch JSON data from a URL."""
+    response = requests.get(url)
+    return response.json()
 
 def memoize(method):
     """Cache the result of a method."""
