@@ -1,56 +1,74 @@
 #!/usr/bin/env python3
 
-
-import requests
-from functools import wraps
-from typing import Any, Tuple, Union
-
-
-def access_nested_map(nested_map: dict, path: Tuple[str]) -> Union[Any, None]:
-    """
- 
-    """
-    if not isinstance(nested_map, dict) or not isinstance(path, tuple):
-        raise TypeError("nested_map must be a dictionary and path must be a tuple")
-    if not path:
-        return nested_map
-
-    current = nested_map
-    for key in path:
-        if not isinstance(current, dict) or key not in current:
-            raise KeyError(key)
-        current = current[key]
-    return current
+import unittest
+from unittest.mock import Mock, patch
+from utils import access_nested_map, get_json, memoize
+from parameterized import parameterized
 
 
-def get_json(url: str) -> Union[dict, list, None]:
-    """
-   
-    """
-    try:
-        response = requests.get(url)
-        response.raise_for_status()  
-        return response.json()
-    except requests.RequestException:
-        return None
+class TestAccessNestedMap(unittest.TestCase):
+    """Test class for access_nested_map function."""
+
+    @parameterized.expand([
+        ({"a": 1}, ("a",), 1),
+        ({"a": {"b": 2}}, ("a",), {"b": 2}),
+        ({"a": {"b": 2}}, ("a", "b"), 2),
+    ])
+    def test_access_nested_map(self, nested_map, path, expected):
+        """Test that access_nested_map returns the expected value."""
+        self.assertEqual(access_nested_map(nested_map, path), expected)
+
+    @parameterized.expand([
+        ({}, ("a",), "'a'"),
+        ({"a": 1}, ("a", "b"), "'b'"),
+    ])
+    def test_access_nested_map_exception(self, nested_map, path, expected_msg):
+        """Test that access_nested_map raises KeyError with expected message."""
+        with self.assertRaises(KeyError) as context:
+            access_nested_map(nested_map, path)
+        self.assertEqual(str(context.exception), expected_msg)
 
 
-def memoize(method):
-    """
-   
-    """
-    @wraps(method)
-    def wrapper(self, *args, **kwargs):
-        """Wrapper function to handle caching."""
-        cache_key = f"_{method.__name__}_cache"
-        if not hasattr(self, cache_key):
-            setattr(self, cache_key, method(self, *args, **kwargs))
-        return getattr(self, cache_key)
-    return wrapper
+class TestGetJson(unittest.TestCase):
+    """Test class for get_json function."""
+
+    @parameterized.expand([
+        ("http://example.com", {"payload": True}),
+        ("http://holberton.io", {"payload": False}),
+    ])
+    @patch('utils.requests.get')
+    def test_get_json(self, test_url, test_payload, mock_get):
+        """Test that get_json returns the expected payload and calls get once."""
+        mock_response = Mock()
+        mock_response.json.return_value = test_payload
+        mock_get.return_value = mock_response
+
+        result = get_json(test_url)
+        self.assertEqual(result, test_payload)
+        mock_get.assert_called_once_with(test_url)
 
 
-if __name__ == "__main__":
-    
-    nested = {"a": {"b": 42}}
-    print(access_nested_map(nested, ("a", "b"))) 
-    print(get_json("https://api.github.com"))  
+class TestMemoize(unittest.TestCase):
+    """Test class for memoize decorator."""
+
+    def test_memoize(self):
+        """Test that memoize caches the result and calls a_method once."""
+        class TestClass:
+            def a_method(self):
+                return 42
+            @memoize
+            def a_property(self):
+                return self.a_method()
+
+        with patch.object(TestClass, 'a_method') as mock_method:
+            mock_method.return_value = 42
+            test_class = TestClass()
+            result1 = test_class.a_property()
+            result2 = test_class.a_property()
+            self.assertEqual(result1, 42)
+            self.assertEqual(result2, 42)
+            mock_method.assert_called_once()
+
+
+if __name__ == '__main__':
+    unittest.main()
