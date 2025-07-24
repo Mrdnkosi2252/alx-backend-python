@@ -17,7 +17,6 @@ class TestAccessNestedMap(unittest.TestCase):
     ])
     def test_access_nested_map(self, nested_map, path, expected):
         """Check that access_nested_map returns the expected value."""
-        print(f"Testing {nested_map} with path {path}")
         self.assertEqual(access_nested_map(nested_map, path), expected)
 
     @parameterized.expand([
@@ -26,7 +25,6 @@ class TestAccessNestedMap(unittest.TestCase):
     ])
     def test_access_nested_map_exception(self, nested_map, path, expected_msg):
         """Ensure KeyError is raised with the correct message."""
-        print(f"Testing exception for {nested_map} with path {path}")
         with self.assertRaises(KeyError) as context:
             access_nested_map(nested_map, path)
         self.assertEqual(str(context.exception), expected_msg)
@@ -42,7 +40,6 @@ class TestGetJson(unittest.TestCase):
     @patch("utils.requests.get")
     def test_get_json(self, test_url, test_payload, mock_get):
         """Validate that get_json returns the expected payload and calls get once."""
-        print(f"Testing URL: {test_url}, Payload: {test_payload}")
         mock_response = Mock()
         mock_response.json.return_value = test_payload
         mock_get.return_value = mock_response
@@ -67,7 +64,6 @@ class TestMemoize(unittest.TestCase):
                 """Access the cached method result."""
                 return self.a_method()
 
-        print("Testing memoize decorator")
         with patch.object(TestClass, "a_method") as mock_method:
             mock_method.return_value = 42
             test_instance = TestClass()
