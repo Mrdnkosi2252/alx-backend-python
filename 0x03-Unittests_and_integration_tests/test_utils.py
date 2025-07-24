@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Unit tests for access_nested_map, get_json, and memoize functions."""
+"""Unit tests for access_nested_map, get_json, and memoize functions i."""
 
 import unittest
 from unittest.mock import Mock, patch
@@ -16,7 +16,7 @@ class TestAccessNestedMap(unittest.TestCase):
         ({"a": {"b": 2}}, ("a", "b"), 2),
     ])
     def test_access_nested_map(self, nested_map, path, expected):
-        """Check that access_nested_map returns the expected value."""
+        """Check that nested access returns the expected value."""
         self.assertEqual(access_nested_map(nested_map, path), expected)
 
     @parameterized.expand([
@@ -39,7 +39,7 @@ class TestGetJson(unittest.TestCase):
     ])
     @patch("utils.requests.get")
     def test_get_json(self, test_url, test_payload, mock_get):
-        """Validate that get_json returns the expected payload and calls get once."""
+        """Validate response payload and HTTP call."""
         mock_response = Mock()
         mock_response.json.return_value = test_payload
         mock_get.return_value = mock_response
@@ -53,15 +53,16 @@ class TestMemoize(unittest.TestCase):
     """Tests for the memoize decorator."""
 
     def test_memoize(self):
-        """Confirm that memoize caches the method's output."""
+        """Confirm that memoize caches output of the method."""
+
         class TestClass:
             def a_method(self):
-                """Return a fixed value for testing."""
+                """Return a fixed value."""
                 return 42
 
             @memoize
             def a_property(self):
-                """Access the cached method result."""
+                """Access cached method."""
                 return self.a_method()
 
         with patch.object(TestClass, "a_method") as mock_method:
