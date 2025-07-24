@@ -22,13 +22,13 @@ class TestGithubOrgClient(unittest.TestCase):
         mock_get_json.return_value = mock_payload
         client = GithubOrgClient(org_name)
         result = client.org
-        url = f"https://api.github.com/orgs/{org_name}"
-        mock_get_json.assert_called_once_with(url)
+        expected = f"https://api.github.com/orgs/{org_name}"
+        mock_get_json.assert_called_once_with(expected)
         self.assertEqual(result, mock_payload)
 
-    @patch.object(GithubOrgClient, '_public_repos_url', new_callable=property)
     @patch('client.get_json')
-    def test_public_repos(self, mock_get_json, mock_url) -> None:
+    @patch.object(GithubOrgClient, '_public_repos_url', new_callable=property)
+    def test_public_repos(self, mock_url, mock_get_json) -> None:
         """Test that public_repos returns expected repo names."""
         mock_url.return_value = "https://api.github.com/orgs/test/repos"
         mock_get_json.return_value = [
@@ -38,7 +38,8 @@ class TestGithubOrgClient(unittest.TestCase):
         ]
         client = GithubOrgClient("test")
         result = client.public_repos
-        mock_get_json.assert_called_once_with(mock_url.return_value)
+        expected = mock_url.return_value
+        mock_get_json.assert_called_once_with(expected)
         self.assertEqual(result, ["repo1", "repo2", "repo3"])
 
     @parameterized.expand([
