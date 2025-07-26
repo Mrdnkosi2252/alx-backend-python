@@ -10,10 +10,16 @@ def access_nested_map(nested_map, path):
             raise KeyError(key)
     return value
 
+
+
+
 def get_json(url):
-    """Fetch JSON data from a URL."""
-    response = requests.get(url)
-    return response.json()
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        return response.json()
+    except requests.RequestException:
+        return None
 
 def memoize(method):
     """Cache the result of a method."""
