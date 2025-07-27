@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Messaging App API</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'chats/style.css' %}">
+</head>
+<body>
+    <div class="wrapper">
+        <div class="card">
+            <h1>Welcome to the Messaging App API 💬</h1>
+            <p>This RESTful API allows registered users to exchange messages in secure conversations.<br>
+               Powered by Django, DRF, and JWT Authentication.</p>
+            <a class="button" href="/api/conversations/">View Conversations</a>
+            <a class="button" href="/api/messages/" style="margin-left: 10px;">View Messages</a>
+            <div class="footer">
+                Built with love by David · Backend-ready · Django · DRF · JWT
+            </div>
+        </div>
+    </div>
+</body>
+</html>
