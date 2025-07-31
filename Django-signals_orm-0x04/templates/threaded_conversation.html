@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Conversation with {{ other_user.username }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { color: #333; }
+        .message { margin: 10px 0; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+        .message.reply { margin-left: 20px; }
+        .message-header { font-weight: bold; }
+        .message-content { margin-top: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Conversation with {{ other_user.username }}</h1>
+    {% for message in messages %}
+        <div class="message {% if message.parent_message %}reply{% endif %}">
+            <div class="message-header">
+                {{ message.sender.username }} to {{ message.receiver.username }} at {{ message.timestamp }}
+                {% if message.parent_message %}
+                    (Reply to message #{{ message.parent_message.id }})
+                {% endif %}
+            </div>
+            <div class="message-content">{{ message.content }}</div>
+        </div>
+    {% empty %}
+        <p>No messages in this conversation.</p>
+    {% endfor %}
+</body>
+</html>

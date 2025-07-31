@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Delete Account</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { color: #333; }
+        .warning { color: red; }
+        .form-container { margin-top: 20px; }
+        button { padding: 10px 20px; background-color: #d9534f; color: white; border: none; cursor: pointer; }
+        button:hover { background-color: #c9302c; }
+    </style>
+</head>
+<body>
+    <h1>Delete Your Account</h1>
+    <p class="warning">Warning: This action cannot be undone. All your messages, notifications, and edit history will be deleted.</p>
+    <form method="post" class="form-container">
+        {% csrf_token %}
+        <button type="submit">Confirm Delete Account</button>
+    </form>
+</body>
+</html>
