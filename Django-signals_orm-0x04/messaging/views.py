@@ -21,7 +21,7 @@ def delete_user(request):
     return render(request, 'messaging/delete_user.html')
 
 @login_required
-@cache_page(60)  # Cache for 60 seconds
+@cache_page(60)
 def threaded_conversation(request, user_id):
     other_user = get_object_or_404(User, id=user_id)
     messages = Message.objects.filter(
@@ -50,7 +50,7 @@ def threaded_conversation(request, user_id):
 
 @login_required
 def inbox(request):
-    unread_messages = Message.unread.for_user(request.user).only(
+    unread_messages = Message.unread.unread_for_user(request.user).only(
         'sender__username', 'content', 'timestamp', 'read'
     ).select_related('sender')
     return render(request, 'messaging/inbox.html', {'unread_messages': unread_messages})
