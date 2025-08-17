@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# Check if Minikube is installed
+if ! command -v minikube &> /dev/null; then
+  echo "Minikube is not installed. Please install it manually:"
+  echo "For Windows/Git Bash: curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-windows-amd64.exe"
+  echo "Move to a PATH directory and rename to minikube.exe."
+  exit 1
+fi
+
+# Check if kubectl is installed
+if ! command -v kubectl &> /dev/null; then
+  echo "kubectl is not installed. Installing via Minikube alias..."
+  minikube kubectl -- get pods > /dev/null 2>&1
+fi
+
+# Check if Docker is running
+if ! docker info > /dev/null 2>&1; then
+  echo "Docker is not running. Please start Docker Desktop and try again."
+  exit 1
+fi
+
+# Start Minikube cluster with Docker driver
+echo "Starting Minikube cluster..."
+minikube start --driver=docker
+
+# Verify cluster is running
+echo "Verifying cluster status..."
+kubectl cluster-info
+
+# Retrieve available pods
+echo "Retrieving available pods..."
+kubectl get pods
+
+echo " Kubernetes cluster setup complete. If no pods are listed, that's normal for a fresh cluster."

@@ -1,0 +1,20 @@
+#!/bin/bash
+echo "Applying updated blue deployment..."
+kubectl apply -f blue_deployment.yaml
+
+echo "Monitoring rollout status..."
+kubectl rollout status deployment/django-messaging-app
+
+echo "Testing for downtime..."
+for i in {1..30}; do
+  curl -s http://localhost:8000/api/ > /dev/null
+  if [ $? -ne 0 ]; then
+    echo "Downtime detected!"
+    exit 1
+  fi
+  echo "Request $i successful."
+  sleep 1
+done
+
+echo "Verifying pods..."
+kubectl get pods

@@ -1,0 +1,42 @@
+apiVersapiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django-messaging-app-green
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: django-messaging-app
+      version: green
+  template:
+    metadata:
+      labels:
+        app: django-messaging-app
+        version: green
+    spec:
+      containers:
+      - name: django-container
+        image: yourusername/django-messaging-app:2.0
+        ports:
+        - containerPort: 8000
+ion: apps/v1
+kind: Deployment
+metadata:
+  name: django-messaging-app-green
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: django-messaging-app
+      version: green
+  template:
+    metadata:
+      labels:
+        app: django-messaging-app
+        version: green
+    spec:
+      containers:
+      - name: django-container
+        image: yourusername/django-messaging-app:2.0
+        ports:
+        - containerPort: 8000
