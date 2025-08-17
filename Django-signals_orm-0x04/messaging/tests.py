@@ -120,7 +120,7 @@ class MessagingTests(TestCase):
             content="Read message",
             read=True
         )
-        unread = Message.unread.for_user(self.receiver)
+        unread = Message.unread.unread_for_user(self.receiver)
         self.assertEqual(unread.count(), 1)
         self.assertEqual(unread.first().content, "Unread message")
         
@@ -132,7 +132,7 @@ class MessagingTests(TestCase):
             read=False
         )
         with self.assertNumQueries(1):
-            messages = Message.unread.for_user(self.receiver).only(
+            messages = Message.unread.unread_for_user(self.receiver).only(
                 'sender__username', 'content', 'timestamp', 'read'
             ).select_related('sender')
             for message in messages:
